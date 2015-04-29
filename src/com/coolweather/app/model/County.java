@@ -12,7 +12,7 @@ public class County {
 		this.id=id;
 	}
 	
-	public int id()
+	public int getId()
 	{
 		return id;
 	}

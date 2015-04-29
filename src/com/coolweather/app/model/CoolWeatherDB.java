@@ -15,7 +15,7 @@ public class CoolWeatherDB {
 	public static final String DB_NAME="cool_weather";
 	
 	private static CoolWeatherDB coolWeatherDB;
-	private static final int VERSION=1;
+	public static final int VERSION=1;
 	private  SQLiteDatabase db;
 	
 	private CoolWeatherDB(Context context)
@@ -45,12 +45,12 @@ public class CoolWeatherDB {
 		}
 	}
 	
-	public List<Province> loadingProvinces()
+	public List<Province> loadProvinces()
 	{
 		List<Province> list=new ArrayList<Province>();
 		Cursor cursor=db.query("Province",null,null,null,null,null,null);
 		if(cursor.moveToFirst())
-		{
+		do{
 			Province province=new Province();
 			province.setId(cursor.getInt(cursor.getColumnIndex("id")));
 			province.setProvinceName(cursor.getString(cursor.getColumnIndex("province_name")));
@@ -73,12 +73,12 @@ public class CoolWeatherDB {
 		}
 	}
 	
-	public List<City> loadingCities(int provinceId)
+	public List<City> loadCities(int provinceId)
 	{
 		List<City> list=new ArrayList<City>();
 		Cursor cursor=db.query("City",null,"province_id=?",new String[]{String.valueOf(provinceId)},null,null,null);
 		if(cursor.moveToFirst())
-		{
+		do{
 			City city=new City();
 			city.setId(cursor.getInt(cursor.getColumnIndex("id")));
 			city.setCityName(cursor.getString(cursor.getColumnIndex("city_name")));
@@ -102,10 +102,10 @@ public class CoolWeatherDB {
 		}
 	}
 	
-	public List<County> loadingCounty(int cityId)
+	public List<County> loadCounties(int cityId)
 	{
 		List<County> list=new ArrayList<County>();
- 		Cursor cursor=db.query("County",null,"City=?",new String[]{String.valueOf(cityId)},null,null,null);
+ 		Cursor cursor=db.query("County",null,"city_id=?",new String[]{String.valueOf(cityId)},null,null,null);
 		if(cursor.moveToFirst())
  		do{
  			County county=new County();
@@ -113,6 +113,7 @@ public class CoolWeatherDB {
 			county.setCountyName(cursor.getString(cursor.getColumnIndex("county_name")));
 			county.setCountyCode(cursor.getString(cursor.getColumnIndex("county_code")));
 			county.setCityId(cityId);
+			list.add(county);
 		}while(cursor.moveToNext());
 		return list;
 	}
